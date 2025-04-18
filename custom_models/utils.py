@@ -5,7 +5,6 @@ def get_movie_by_id(df, movie_id):
     try:
         return df.loc[df["ITEM_ID"] == int(movie_id)][['ITEM_ID', 'TITLE', 'GENRES', 'TYPE']].values[0]
     except Exception as e:
-        print(movie_id)
         return "Error obtaining title"
 
 

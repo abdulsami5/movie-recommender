@@ -14,7 +14,6 @@ movie_df = pd.read_csv("data/imdb_processed.csv")
 # Initialize recommender
 def load_model():
     global model
-    print("Loading model in background...")
     model = TFIDFRecommender(movie_df)
     model.fit()
 
@@ -61,5 +60,4 @@ def recommend(item_id):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
-    print(f"✅ Flask is starting on port 5000")
+    app.run(host="0.0.0.0", port=5000, threaded=True)

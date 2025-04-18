@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 class TFIDFRecommender:
     known_genres = ['Action', 'Comedy', 'Thriller', 'Drama', 'Sci-Fi', 'Romance', 'Horror Movies', 'Animation']
 
-    def __init__(self, df, title_weight=1, genres_weight=2, known_genre_weight=3):
+    def __init__(self, df, title_weight=2, genres_weight=2, known_genre_weight=3):
         self.df = df.copy()
         self.vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2))
 

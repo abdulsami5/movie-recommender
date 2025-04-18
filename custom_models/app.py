@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import pandas as pd
+from threading import Thread
 
 from similar_items.recommender import TFIDFRecommender
 from utils import get_top_matched_titles
@@ -9,8 +10,17 @@ app = Flask(__name__)
 # Load movie data
 movie_df = pd.read_csv("data/imdb_processed.csv")
 
+
 # Initialize recommender
+def load_model():
+    global model
+    print("Loading model in background...")
+    model = TFIDFRecommender(movie_df)
+    model.fit()
+
+
 model = None
+Thread(target=load_model).start()
 
 
 @app.route("/", methods=["GET"])
@@ -20,12 +30,6 @@ def home():
 
 @app.route("/search", methods=["GET"])
 def search():
-    global model
-    if model is None:
-        print("Loading model on first request...")
-        model = TFIDFRecommender(movie_df)
-        model.fit()
-
     query = request.args.get("q", "").strip()
     if not query:
         return render_template("index.html", results=[], query=query)

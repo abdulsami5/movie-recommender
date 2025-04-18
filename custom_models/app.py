@@ -10,8 +10,7 @@ app = Flask(__name__)
 movie_df = pd.read_csv("data/imdb_processed.csv")
 
 # Initialize recommender
-model = TFIDFRecommender(movie_df)
-model.fit()
+model = None
 
 
 @app.route("/", methods=["GET"])
@@ -21,6 +20,12 @@ def home():
 
 @app.route("/search", methods=["GET"])
 def search():
+    global model
+    if model is None:
+        print("Loading model on first request...")
+        model = TFIDFRecommender(movie_df)
+        model.fit()
+
     query = request.args.get("q", "").strip()
     if not query:
         return render_template("index.html", results=[], query=query)
@@ -52,4 +57,5 @@ def recommend(item_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
+    print(f"✅ Flask is starting on port 5000")

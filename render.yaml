@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: movie-recommender
+    env: python
+    buildCommand: "cd custom_models && pip install -r requirements.txt"
+    startCommand: "cd custom_models && python app.py"
